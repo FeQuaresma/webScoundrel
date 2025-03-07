@@ -44,7 +44,7 @@ export const deck = [
   "9O",
   "10O",
 ];
-export const deckObj = {
+export const deckObj: {[key: string]: [number, string]} = {
   "2P": [2, "P"], "3P": [3, "P"], "4P": [4, "P"], "5P": [5, "P"], "6P": [6, "P"],
   "7P": [7, "P"], "8P": [8, "P"], "9P": [9, "P"], "10P": [10, "P"], "AP": [14, "P"],
   "JP": [11, "P"], "QP": [12, "P"], "KP": [13, "P"], "2C": [2, "C"], "3C": [3, "C"],

@@ -4,7 +4,7 @@ export default function Card({ CName, onClick }: { CName: string, onClick?: Void
   }
   return (
     <button
-      style={{ backgroundColor: "grey", height: 300, width: 200 }}
+      style={{ backgroundColor: "white", height: 300, width: 200 }}
       onClick={() => onClick ? onClick() : console.log(CName)}
     >
       <span style={{ color: "black" }}>{CName}</span>
