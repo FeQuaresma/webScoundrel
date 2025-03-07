@@ -1,9 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../App.css";
 import Card from "../../components/card";
 import { deck, deckObj } from "../../constants/deck";
 
 function App() {
+  const [runningDeck, setRunningDeck] = useState<string[]>(shuffleArray());
+  const [cardsInPlay, setCardsInPlay] = useState<string[]>([]);
+  const [weapon, setWeapon] = useState<string>("");
+  const [monster, setMonster] = useState<string>("");
+  const [pile, setPile] = useState<string>("");
+  const [healthPoints, setHealthPoints] = useState<number>(20);
+
+  useEffect(() => {
+    if (runningDeck.length >= 1) {
+      if (cardsInPlay.length === 1) {
+        drawHand(cardsInPlay[0]);
+      }
+    }
+  }, [cardsInPlay]);
+
   function shuffleArray() {
     const matriz = [...deck];
     for (let i = matriz.length - 1; i > 0; i--) {
@@ -13,21 +28,23 @@ function App() {
     return matriz;
   }
 
-  const [runningDeck, setRunningDeck] = useState<string[]>(shuffleArray());
-  const [cardsInPlay, setCardsInPlay] = useState<string[]>([]);
-  const [weapon, setWeapon] = useState<string>("");
-  const [monster, setMonster] = useState<string>("");
-  const [pile, setPile] = useState<string>("");
-  const [healthPoints, setHealthPoints] = useState<number>(20);
-
-  function drawHand() {
+  function drawHand(lastCard?: string) {
     const deckTemp = runningDeck;
     const cardsTemp = [];
-    for (let i = 0; i < 4; i++) {
-      const firstCard = deckTemp.shift();
-      if (firstCard) {
-        console.log(firstCard);
-        cardsTemp?.push(firstCard);
+    if (lastCard) {
+      cardsTemp?.push(lastCard);
+      for (let i = 0; i < 3; i++) {
+        const firstCard = deckTemp.shift();
+        if (firstCard) {
+          cardsTemp?.push(firstCard);
+        }
+      }
+    } else {
+      for (let i = 0; i < 4; i++) {
+        const firstCard = deckTemp.shift();
+        if (firstCard) {
+          cardsTemp?.push(firstCard);
+        }
       }
     }
     setCardsInPlay(cardsTemp);
@@ -48,7 +65,6 @@ function App() {
     const playedCard = deckObj[cardName] ? deckObj[cardName] : undefined;
     const weaponEquiped = deckObj[weapon] ? deckObj[weapon][0] : 0;
     tempCards.splice(tempCards.indexOf(cardName), 1);
-    console.log(playedCard);
     if (playedCard) {
       let tempHp = healthPoints + playedCard[0];
       const damegeDealt = playedCard[0] - weaponEquiped;
@@ -76,7 +92,7 @@ function App() {
 
   return (
     <div style={{ display: "flex", gap: 10, flexDirection: "column" }}>
-      <button onClick={drawHand}>Draw</button>
+      <button onClick={() => drawHand()}>Draw</button>
       <button onClick={() => resetGame()}>Restart</button>
       <div>
         <span>HP: {healthPoints}</span>
